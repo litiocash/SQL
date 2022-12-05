@@ -1,0 +1,8 @@
+CREATE TABLE fantasy (id INTEGER PRIMARY KEY, name TEXT, quantity INTEGER, location TEXT, rarity INTEGER);
+INSERT INTO fantasy Values (1, "Thunder Cats", 5, "back", 20);
+INSERT INTO fantasy VALUES (2, "Saint Seya", 10, "back", 5);
+INSERT INTO fantasy VALUES (3, "Punisher", 8,"line", 5);
+INSERT INTO fantasy VALUES (4, "Dragon ball", 11,"line",9);
+
+SELECT * FROM fantasy;
+SELECT * FROM fantasy ORDER BY quantity desc;
