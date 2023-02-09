@@ -50,7 +50,21 @@ GROUP BY artist_name
 ORDER BY Songs desc;
 
 -- What are the most popular artists in 2021?
+
 SELECT artist_name, AVG(popularity) Popu
 FROM BIT_DB.Spotifydata
 GROUP BY artist_name
 ORDER BY Popu desc;
+
+-- Calculate the average popularity for the artists in the Spotify data table. 
+-- Then, for every artist with an average popularity of 90 or above, show their name, their average popularity, and label them as a “Top Star”.
+
+WITH Filtered as(SELECT artist_name Artist, AVG(popularity) AvgPopu
+FROM Spotifydata
+group by Artist)
+SELECT Artist
+    ,AvgPopu
+    ,'Top Star' as tag
+FROM Filtered
+WHERE AvgPopu>89
+ORDER BY AvgPopu desc;
