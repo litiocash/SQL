@@ -68,3 +68,4 @@ SELECT Artist
 FROM Filtered
 WHERE AvgPopu>89
 ORDER BY AvgPopu desc;
+ 
