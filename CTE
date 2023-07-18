@@ -1,0 +1,122 @@
+#RockBuster Project
+
+**Based on the Brief of the project the following queries were used to answer key questions**
+
+
+
+**Query 1** *The company needs the overall information from main films to have a Background Information*
+
+SELECT MIN(rental_duration)AS min_rental_duration,
+ MAX(rental_duration)AS max_rental_duration,
+ AVG(rental_duration)AS avg_rental_duration,
+ COUNT(rental_duration)AS count_rental_duration_values,
+ MIN(rental_rate)AS min_rental_rate,
+ MAX(rental_rate)AS max_rental_rate,
+ AVG(rental_rate)AS avg_rental_rate,
+ COUNT(rental_rate)AS count_rental_rate_values,
+ MIN(length)AS min_length,
+ MAX(length)AS max_length,
+ AVG(length)AS avg_length,
+ COUNT(length)AS count_length_values,
+ MIN(replacement_cost)AS min_replacement_cost,
+ MAX(replacement_cost)AS max_replacement_cost,
+ AVG(replacement_cost)AS avg_replacement_cost,
+ COUNT(replacement_cost)AS
+count_replacement_cost_values,
+ COUNT(*) AS count_rows
+FROM film;
+
+
+**Query 2** *Which movies contributed the most/least to revenue gain?*
+
+SELECT MODE() WITHIN GROUP (ORDER BY title) AS
+title_mode_value,
+ MODE() WITHIN GROUP (ORDER BY description) AS
+description_mode_value,
+ MODE() WITHIN GROUP (ORDER BY release_year)
+AS release_year_mode_value,
+ MODE() WITHIN GROUP (ORDER BY rating) AS
+rating_mode_value,
+ MODE() WITHIN GROUP (ORDER BY
+special_features) AS special_features_mode_value,
+ MODE() WITHIN GROUP (ORDER BY last_update)
+AS last_update_mode_value,
+ MODE() WITHIN GROUP (ORDER BY fulltext) AS
+fulltext_mode_value
+FROM film
+
+**Query 3** *Which movies contributed the most/least to revenue gain?*
+
+SELECT MODE() WITHIN GROUP (ORDER BY first_name) AS
+first_name_mode_value,
+ MODE() WITHIN GROUP (ORDER BY last_name) AS
+last_name_mode_value,
+ MODE() WITHIN GROUP (ORDER BY create_date)
+AS create_date_mode_value,
+ MODE() WITHIN GROUP (ORDER BY last_update)
+AS last_update_mode_value,
+ MODE() WITHIN GROUP (ORDER BY active) AS
+active_mode_value
+FROM customer
+
+**Query 4** *Top 10 Countries*
+
+SELECT country.country,
+	   COUNT(customer_id) AS Num_clients
+FROM country
+INNER JOIN city ON country.country_id = city.country_id
+INNER JOIN address ON city.city_id = address.city_id
+INNER JOIN customer ON address.address_id = customer.address_id
+GROUP BY country ORDER BY Num_clients DESC
+LIMIT 10;
+
+
+**Query 5** *Top 10 Cities*
+SELECT country.country, city.city, COUNT(customer_id) AS "number of customers"
+FROM customer
+INNER JOIN address ON customer.address_id = address.address_id
+INNER JOIN city ON address.city_id = city.city_id
+INNER JOIN country ON city.country_id = country.country_id
+WHERE country IN ('India','China','United States','Japan','Mexico','Brazil','Russian
+Federation','Phillippines','Turkey','Indonesia')
+GROUP BY country, city
+ORDER BY COUNT(customer_id) DESC
+LIMIT 10;
+
+**Query 6** *Top 5 Customers*
+
+SELECT customer.customer_id, customer.first_name AS "customer first name", customer.last_name AS "customer last
+name", country.country, city.city,
+SUM(payment.amount) AS "total amount paid"
+FROM customer
+INNER JOIN address ON customer.address_id = address.address_id
+INNER JOIN city ON address.city_id = city.city_id
+INNER JOIN country ON city.country_id = country.country_id
+INNER JOIN payment ON customer.customer_id = payment.customer_id
+WHERE city IN('Aurora','Acua','Citrus Heights','Iwaki','Ambattur','Shanwei','So
+Leopoldo','Teboksary','Tianjin','Cianjur')
+GROUP BY customer.customer_id, first_name, last_name, country, city
+ORDER BY "total amount paid" DESC
+LIMIT 5
+
+**Query 7** *Top 10 Films*
+
+SELECT title,
+		SUM(payment.amount) AS Revenue
+FROM film
+	INNER JOIN inventory ON inventory.film_id = film.film_id
+	INNER JOIN rental ON rental.inventory_id = inventory.inventory_id
+	INNER JOIN payment ON payment.rental_id = rental.rental_id
+GROUP BY title order by Revenue DESC
+limit 10;
+
+**Query 8** *Bottom 10 Revenue Films*
+
+SELECT title,
+		SUM(payment.amount) AS Revenue
+FROM film
+	INNER JOIN inventory ON inventory.film_id = film.film_id
+	INNER JOIN rental ON rental.inventory_id = inventory.inventory_id
+	INNER JOIN payment ON payment.rental_id = rental.rental_id
+GROUP BY title order by Revenue ASC
+limit 10
